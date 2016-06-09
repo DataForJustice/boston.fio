@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+	<meta charset="UTF-8">
+	<title>Stop and Frisk in Boston</title>
+                <meta charset="utf-8"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+                <script src="//dist.ant-project.com/jquery.min.js"></script>
+                <script src="//dist.ant-project.com/d3.min.js"></script>
+		<script src="//dist.ant-project.com/d3.geo.projection.v0.min.js"></script>
+                <script src="//dist.ant-project.com/queue.min.js"></script>
+                <script src="//dist.ant-project.com/topojson.js"></script>
+                <script src="//dist.ant-project.com/ant.js"></script>
+		<script src="ant.js"></script>
+                <link rel="stylesheet" href="style.css"/>
+	</head>
+	<body>
+		<a data-onload id="download" data-download="data.csv" data-download_id="saf" data-download_processor="process" data-download_parse=".quantifier" data-debug="Start download"></a>
+		<div class="col">
+			<h2>Stops by Zipcode</h2>
+			<h3>Total</h3>
+			<div id="total" data-chart="lines" class="chart columns"></div>
+			<a class="quantifier" data-control_chart="total" data-quantify="saf" data-quantifier="total" data-quantifier_args='{"cols": ["total"], "comp": "total"}'></a> 
+			<h3>Frisks</h3>
+			<div id="total_frisks" data-chart="lines" class="chart columns"></div>
+			<a class="quantifier" data-control_chart="total_frisks" data-quantify="saf" data-quantifier="total" data-quantifier_args='{"cols": ["frisked_total"], "comp": "total"}'></a> 
+			<h3>Searches</h3>
+			<div id="total_searches" data-chart="lines" class="chart columns"></div>
+			<a class="quantifier" data-control_chart="total_searches" data-quantify="saf" data-quantifier="total" data-quantifier_args='{"cols": ["search_total"], "comp": "total"}'></a> 
+			<h3>Summons Issued</h3>
+			<div id="total_summons" data-chart="lines" class="chart columns"></div>
+			<a class="quantifier" data-control_chart="total_summons" data-quantify="saf" data-quantifier="total" data-quantifier_args='{"cols": ["summons_total"], "comp": "total"}'></a> 
+
+		</div>
+		<div class="col">
+			<h2>Black, Hispanic and White</h2>
+			<h3>Total</h3>
+			<div id="race_total" data-chart="lines" class="chart columns"></div>
+			<a class="quantifier" data-control_chart="race_total" data-quantify="saf" data-quantifier="total" data-quantifier_args='{"cols": ["black_total", "white_total", "hispanic_total"], "comp": "total"}'></a>
+			<h3>Frisks</h3>
+			<div id="race_frisked" data-chart="lines" class="chart columns"></div>
+			<a class="quantifier" data-control_chart="race_frisked" data-quantify="saf" data-quantifier="total" data-quantifier_args='{"cols": ["frisked_black", "frisked_white", "frisked_hispanic"], "comp": "total"}'></a>
+			<h3>Searches</h3>
+			<div id="race_search" data-chart="lines" class="chart columns"></div>
+			<a class="quantifier" data-control_chart="race_search" data-quantify="saf" data-quantifier="total" data-quantifier_args='{"cols": ["search_black", "search_white", "search_hispanic"], "comp": "total"}'></a>
+			<h3>Summons Issued</h3>
+			<div id="race_summons" data-chart="lines" class="chart columns"></div>
+			<a class="quantifier" data-control_chart="race_summons" data-quantify="saf" data-quantifier="total" data-quantifier_args='{"cols": ["summons_black", "summons_white", "summons_hispanic"], "comp": "total"}'></a>
+		</div>
+		<div class="col">
+			<h2>Relationships</h2>
+			<h3>Stops vs. frisks</h3>
+			<div id="stops_frisks" data-chart="lines" class="chart scatterplot"></div> 
+			<a class="quantifier" data-control_chart="stops_frisks" data-quantify="saf" data-quantifier="total" data-quantifier_args='{"comp": ["total", "total"], "cols": [["total", "frisked_total"], ["black_total", "frisked_black"], ["white_total", "frisked_white"], ["hispanic_total", "frisked_hispanic"]], "scatterplot": true}' data-debug="total_frisks"></a>
+			<h3>Frisks vs. searches</h3>
+			<div id="frisks_searches" data-chart="lines" class="chart scatterplot"></div> 
+			<a class="quantifier" data-control_chart="frisks_searches" data-quantify="saf" data-quantifier="total" data-quantifier_args='{"comp": ["total", "frisked_total"], "cols": [["frisked_total", "search_total"], ["frisked_black", "search_black"], ["frisked_white", "search_white"], ["frisked_hispanic", "search_hispanic"]], "scatterplot": true}' data-debug="total_frisks"></a>
+			<h3>Searches vs Summons issued</h3>
+			<div id="searches_summons" data-chart="lines" class="chart scatterplot"></div> 
+			<a class="quantifier" data-control_chart="searches_summons" data-quantify="saf" data-quantifier="total" data-quantifier_args='{"comp": ["frisked_total", "search_total"], "cols": [["search_total", "summons_total"], ["search_black", "summons_black"], ["search_white", "summons_white"], ["search_hispanic", "summons_hispanic"]], "scatterplot": true}' data-debug="total_frisks"></a>
+		</div>
+		<div class="col">
+			<div>
+				<table>
+					<tr><th>Zip:</th><td colspan="3"><span class="zip_text"></span></td></tr>
+					<tr><th></th><th>White</th><th>Black</th><th>Hispanic</th><th>All</th></tr>
+					<tr><th>Stops:</th>
+						<td><span class="white_total_text"></span></td>
+						<td><span class="black_total_text"></span></td>
+						<td><span class="hispanic_total_text"></span></td>
+						<td><span class="total_text"></span></td>
+					</tr>
+					<tr><th>Frisks:</th>
+						<td><span class="frisked_white_text"></span></td>
+						<td><span class="frisked_black_text"></span></td>
+						<td><span class="frisked_hispanic_text"></span></td>
+						<td><span class="frisked_total_text"></span></td>
+					</tr>
+					<tr><th>Searches:</th>
+						<td><span class="search_white_text"></span></td>
+						<td><span class="search_black_text"></span></td>
+						<td><span class="search_hispanic_text"></span></td>
+						<td><span class="search_total_text"></span></td>
+					</tr>
+					<tr><th>Summons:</th>
+						<td><span class="summons_white_text"></span></td>
+						<td><span class="summons_black_text"></span></td>
+						<td><span class="summons_hispanic_text"></span></td>
+						<td><span class="summons_total_text"></span></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<script>
+		$(document).ready(function () { 
+			var conf = {
+				prequantifiers: {
+					total: function (args) { 
+						var comp = args.comp,
+							scale = {};
+						if (args.scatterplot) { 
+							
+							scale.x = d3.scale.pow ().exponent (.15).domain (this.data.saf.extent (function (a) { return parseInt (a.values [args.comp [1]].value); }));
+							comp = args.comp [0];
+						}
+						var ext = this.data.saf.extent (function (a) { return parseInt (a.values [comp].value);})
+						scale.y = d3.scale.linear ().domain ([ext [1], ext [0]]) 
+
+						var items = this.data.saf.items (), 
+							data = [];
+						for (var i = 0; i < args.cols.length; i++) {
+							data.push ({"values": items, "col": args.cols [i] });
+						}
+						return {
+							"data": data,
+							"scale": scale 
+						}
+					}
+				},
+				quantifiers: {
+					lines: {
+						total: function (zip, args, a, series ) { 
+							/* highlights and updates the labels */
+							var parse = [
+								{"control_element": ".zip", "element_remove_class": "highlight"},
+								{"control_element": ".zip_" + zip.key, "element_add_class": "highlight"},
+							], ret = {
+								"class": "zip " + series.col + " zip_" + zip.key,
+								"data": {"parse": parse}
+							}
+							
+							var its = zip.values.items ();
+							for (var x in its) {
+								parse.push ({
+									"control_element": "." + its[x].key + "_text", 
+									"element_text": its [x].values.value
+								});	
+							}
+
+
+							if (args.scatterplot) { 
+								ret ["class"] = series.col [0] + " " + series.col [1] + " zip zip_" + zip.key;
+								ret.y = a.scale.y (parseInt (zip.values [series.col [0]].value));
+								ret.x = a.scale.x (parseInt (zip.values [series.col [1]].value));
+								ret.r = (zip.values [series.col [1]].value / 30) + 2;
+								if (ret.x == 0) {
+									ret ["class"] = "hide";
+								}
+							} else {
+								ret.y = a.scale.y (parseInt (zip.values [series.col].value));
+								if (parseInt (zip.values [series.col].value) == 0) { 
+								}
+							}
+
+							return ret;
+						}
+					}
+				},
+				callbacks: {
+					process: function (rows, id) { 
+						return new Nestify (rows, ["zip"], ["zip","total","black_total","white_total","hispanic_total","search_total","summons_total","search_black","search_white","search_hispanic","summons_black","summons_white","summons_hispanic", "frisked_total", "frisked_black", "frisked_white", "frisked_hispanic"]).data;
+					}
+				}
+			};
+			new Ant (conf);
+		});
+		</script>
+	</body>
+</html>

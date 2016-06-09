@@ -1,0 +1,78 @@
+body {
+	width: 99vw;
+	height: 99vh;
+	margin: 0;
+	padding: 0;
+	color: gray;
+}
+h1,h2,h3,h4,h5,h6 { 
+	margin: 0;
+}
+h2 { font-size: 1.1em; text-align: center; margin-bottom: 1%; }
+h3 { font-size: 1em; }
+div.col {
+	float: left;
+	width: 25%;
+	height: 100%;
+}
+.chart, .columns path, .chart path { 
+	fill: none;
+}
+.axis path {
+	display: none;
+}
+.axis text {
+	fill: red;
+	font-size: 0.3em;
+}
+.axis line {
+	stroke: #777;
+	stroke-dasharray: 1,1;
+}
+div.chart {
+	height: 20%;
+}
+.chart.columns rect.column {
+	fill: rgba(0,123,123,0.5);
+	fill-opacity: 1 !important;
+	stroke: white;
+	stroke-width: 0.5;
+}
+.chart.scatterplot circle {
+	stroke: white;
+	stroke-width: 0.5;
+}
+.black_total, .search_black, .frisked_black, .summons_black { 
+	fill: rgba(0,123,0,0.5) !important;
+}
+.white_total, .search_white, .frisked_white, .summons_white { 
+	fill: rgba(0,0,123,0.5) !important;
+}
+.hispanic_total, .search_hispanic, .frisked_hispanic, .summons_hispanic {
+	fill: rgba(255,140,0,1) !important;
+}
+cirle.total, circle.search_total, circle.frisked_total, circle.summons_total { 
+}
+circle.hide, rect.hide {
+	display: none !important;
+}
+.square {
+	display: none !important;
+}
+/*
+*/
+.columns .highlight.background {
+	fill: rgba(255,0,0,0.6) !important;	
+}
+circle.highlight {
+	stroke: rgba(255,0,0,0.6) !important;
+	stroke-width: 3 !important;
+}
+
+.background, .square, .line, .scatterplot .column { 
+	fill: rgba(0,0,0,0) !important;
+	stroke: none !important;
+}
+.scatterplot .column, .scatterplot .background  { 
+	fill: none !important;
+}
