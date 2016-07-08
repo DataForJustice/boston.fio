@@ -12,10 +12,16 @@ h2 { font-size: 1.1em; text-align: center; margin-bottom: 1%; }
 h3 { font-size: 1em; }
 div.col {
 	float: left;
-	width: 25%;
+	width: 20%;
 	height: 100%;
 }
+div.col.double {
+	width: 40%;
+}
+.chart {
+}
 .chart, .columns path, .chart path { 
+	
 	fill: none;
 }
 .axis path {
@@ -61,18 +67,37 @@ circle.hide, rect.hide {
 }
 /*
 */
-.columns .highlight.background {
+.columns .background .highlight
+{
 	fill: rgba(255,0,0,0.6) !important;	
 }
-circle.highlight {
+circle.highlight{
 	stroke: rgba(255,0,0,0.6) !important;
 	stroke-width: 3 !important;
 }
 
-.background, .square, .line, .scatterplot .column { 
+.background rect, .square, .line, .scatterplot .column rect { 
 	fill: rgba(0,0,0,0) !important;
 	stroke: none !important;
 }
-.scatterplot .column, .scatterplot .background  { 
+.scatterplot .column rect, .scatterplot .background rect  { 
 	fill: none !important;
+}
+#key {
+	display: none;
+}
+#map {
+	width: 100%;
+	height: 50%;
+	background-color: white;
+}
+#map path {
+	fill:none;
+}
+#map path.boston {
+	stroke: black;
+	fill: rgba(233,233,233,0.5);
+}
+#map .highlight {
+	fill: rgba(255,0,0,0.6) !important;
 }

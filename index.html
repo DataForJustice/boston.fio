@@ -6,51 +6,58 @@
                 <meta charset="utf-8"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
                 <script src="//dist.ant-project.com/jquery.min.js"></script>
-                <script src="//dist.ant-project.com/d3.min.js"></script>
-		<script src="//dist.ant-project.com/d3.geo.projection.v0.min.js"></script>
-                <script src="//dist.ant-project.com/queue.min.js"></script>
+		<script src="https://d3js.org/d3.v4.min.js"></script>
+		<script src="https://d3js.org/d3-geo.v1.min.js"></script>
+		<script src="https://d3js.org/d3-geo-projection.v1.min.js"></script>
+		<script src="https://d3js.org/d3-selection-multi.v0.4.min.js"></script>
+		<script src="https://d3js.org/d3-axis.v1.min.js"></script>
                 <script src="//dist.ant-project.com/topojson.js"></script>
-                <script src="//dist.ant-project.com/ant.js"></script>
+                <script src="//dist.ant-project.com/queue.min.js"></script>
+                <!-- <script src="//dist.ant-project.com/ant.js"></script>-->
 		<script src="ant.js"></script>
                 <link rel="stylesheet" href="style.css"/>
 	</head>
 	<body>
-		<a data-onload id="download" data-download="data.csv" data-download_id="saf" data-download_processor="process" data-download_parse=".quantifier" data-debug="Start download"></a>
-		<div class="col">
-			<h2>Stops by Zipcode</h2>
+		<a id="show_key" data-control_element="#key" data-element_show></a>
+		<a id="hide_key" data-control_element="#key" data-element_hide></a>
+		<a id="zoom_to_boston" data-control_chart="map" data-zoom_to=".boston"></a>
+		<a id="quantify_map" data-control_chart="map" data-quantify="zip_race" data-quantifier="zip_race" data-parse="#zoom_to_boston"></a>
+		<a data-onload id="download" data-download="data.csv" data-download_id="saf" data-download_processor="process" data-download_parse=".quantifier,#quantify_map" data-debug="Start download"></a>
+		<div class="col"  data-mouseout="#show_key">
+			<h2 data-onclick data-debug="click">Stops by Zipcode</h2>
 			<h3>Total</h3>
-			<div id="total" data-chart="lines" class="chart columns"></div>
+			<div id="total" data-chart="lines" class="chart columns" data-mouseover="#show_key"></div>
 			<a class="quantifier" data-control_chart="total" data-quantify="saf" data-quantifier="total" data-quantifier_args='{"cols": ["total"], "comp": "total"}'></a> 
 			<h3>Frisks</h3>
-			<div id="total_frisks" data-chart="lines" class="chart columns"></div>
+			<div id="total_frisks" data-chart="lines" class="chart columns" data-mouseover="#show_key"></div>
 			<a class="quantifier" data-control_chart="total_frisks" data-quantify="saf" data-quantifier="total" data-quantifier_args='{"cols": ["frisked_total"], "comp": "total"}'></a> 
 			<h3>Searches</h3>
-			<div id="total_searches" data-chart="lines" class="chart columns"></div>
+			<div id="total_searches" data-chart="lines" class="chart columns" data-mouseover="#show_key"></div>
 			<a class="quantifier" data-control_chart="total_searches" data-quantify="saf" data-quantifier="total" data-quantifier_args='{"cols": ["search_total"], "comp": "total"}'></a> 
 			<h3>Summons Issued</h3>
-			<div id="total_summons" data-chart="lines" class="chart columns"></div>
+			<div id="total_summons" data-chart="lines" class="chart columns" data-mouseover="#show_key"></div>
 			<a class="quantifier" data-control_chart="total_summons" data-quantify="saf" data-quantifier="total" data-quantifier_args='{"cols": ["summons_total"], "comp": "total"}'></a> 
 
 		</div>
-		<div class="col">
+		<div class="col" data-mouseout="#show_key">
 			<h2>Black, Hispanic and White</h2>
 			<h3>Total</h3>
-			<div id="race_total" data-chart="lines" class="chart columns"></div>
+			<div id="race_total" data-chart="lines" class="chart columns" data-mouseover="#show_key"></div>
 			<a class="quantifier" data-control_chart="race_total" data-quantify="saf" data-quantifier="total" data-quantifier_args='{"cols": ["black_total", "white_total", "hispanic_total"], "comp": "total"}'></a>
 			<h3>Frisks</h3>
-			<div id="race_frisked" data-chart="lines" class="chart columns"></div>
+			<div id="race_frisked" data-chart="lines" class="chart columns" data-mouseover="#show_key"></div>
 			<a class="quantifier" data-control_chart="race_frisked" data-quantify="saf" data-quantifier="total" data-quantifier_args='{"cols": ["frisked_black", "frisked_white", "frisked_hispanic"], "comp": "total"}'></a>
 			<h3>Searches</h3>
-			<div id="race_search" data-chart="lines" class="chart columns"></div>
+			<div id="race_search" data-chart="lines" class="chart columns" data-mouseover="#show_key"></div>
 			<a class="quantifier" data-control_chart="race_search" data-quantify="saf" data-quantifier="total" data-quantifier_args='{"cols": ["search_black", "search_white", "search_hispanic"], "comp": "total"}'></a>
 			<h3>Summons Issued</h3>
-			<div id="race_summons" data-chart="lines" class="chart columns"></div>
+			<div id="race_summons" data-chart="lines" class="chart columns" data-mouseover="#show_key"></div>
 			<a class="quantifier" data-control_chart="race_summons" data-quantify="saf" data-quantifier="total" data-quantifier_args='{"cols": ["summons_black", "summons_white", "summons_hispanic"], "comp": "total"}'></a>
 		</div>
-		<div class="col">
+		<div class="col" data-mouseout="#show_key">
 			<h2>Relationships</h2>
 			<h3>Stops vs. frisks</h3>
-			<div id="stops_frisks" data-chart="lines" class="chart scatterplot"></div> 
+			<div id="stops_frisks" data-chart="lines" class="chart scatterplot" data-mouseover="#show_key"></div> 
 			<a class="quantifier" data-control_chart="stops_frisks" data-quantify="saf" data-quantifier="total" data-quantifier_args='{"comp": ["total", "total"], "cols": [["total", "frisked_total"], ["black_total", "frisked_black"], ["white_total", "frisked_white"], ["hispanic_total", "frisked_hispanic"]], "scatterplot": true}' data-debug="total_frisks"></a>
 			<h3>Frisks vs. searches</h3>
 			<div id="frisks_searches" data-chart="lines" class="chart scatterplot"></div> 
@@ -58,9 +65,7 @@
 			<h3>Searches vs Summons issued</h3>
 			<div id="searches_summons" data-chart="lines" class="chart scatterplot"></div> 
 			<a class="quantifier" data-control_chart="searches_summons" data-quantify="saf" data-quantifier="total" data-quantifier_args='{"comp": ["frisked_total", "search_total"], "cols": [["search_total", "summons_total"], ["search_black", "summons_black"], ["search_white", "summons_white"], ["search_hispanic", "summons_hispanic"]], "scatterplot": true}' data-debug="total_frisks"></a>
-		</div>
-		<div class="col">
-			<div>
+			<div id="key">
 				<table>
 					<tr><th>Zip:</th><td colspan="3"><span class="zip_text"></span></td></tr>
 					<tr><th></th><th>White</th><th>Black</th><th>Hispanic</th><th>All</th></tr>
@@ -91,20 +96,34 @@
 				</table>
 			</div>
 		</div>
+		<div class="col double">
+			<div id="map" data-chart="map" data-map_layers="zip_race"  data-map_center_lat="42.330128" data-map_center_lon="-71.067549" data-zoom_level="100000"></div>
+		</div>
 		<script>
 		$(document).ready(function () { 
 			var conf = {
+				data: { 
+					"zip_race": {
+						url: "zip_race.json",
+						type: d3.json,
+						id: "zip_race",
+						key: "stdin",
+						enumerator: "geometries"
+					}
+				},
 				prequantifiers: {
 					total: function (args) { 
 						var comp = args.comp,
 							scale = {};
 						if (args.scatterplot) { 
+							var ext_a = this.data.saf.extent (function (a) { return parseInt (a.values [comp [1]].value);})
 							
-							scale.x = d3.scale.pow ().exponent (.15).domain (this.data.saf.extent (function (a) { return parseInt (a.values [args.comp [1]].value); }));
+							//scale.x = d3.scalePow ().exponent (.15).domain (this.data.saf.extent (function (a) { return parseInt (a.values [args.comp [1]].value); }));
+							scale.x = d3.scaleLinear ().domain ([ext_a [0], ext_a [1]]); 
 							comp = args.comp [0];
 						}
 						var ext = this.data.saf.extent (function (a) { return parseInt (a.values [comp].value);})
-						scale.y = d3.scale.linear ().domain ([ext [1], ext [0]]) 
+						scale.y = d3.scaleLinear ().domain ([ext [1], ext [0]]) 
 
 						var items = this.data.saf.items (), 
 							data = [];
@@ -115,9 +134,28 @@
 							"data": data,
 							"scale": scale 
 						}
-					}
+					},
 				},
 				quantifiers: {
+					maps: {
+						zip_race: function (a, d, e) { 
+							var zip = a.properties.zip;
+							if (this.data.saf [zip]) {
+								var data = {
+									"parse": [
+										{"control_element": ".zip", "element_remove_class": "highlight"},
+										{"control_element": ".zip_" + zip, "element_add_class": "highlight"},
+										
+									], "debug": zip
+								};
+
+								return {"class": "boston zip zip_" + zip, "data": data}
+								
+							} else {
+							}
+
+						}
+					},
 					lines: {
 						total: function (zip, args, a, series ) { 
 							/* highlights and updates the labels */
@@ -148,8 +186,6 @@
 								}
 							} else {
 								ret.y = a.scale.y (parseInt (zip.values [series.col].value));
-								if (parseInt (zip.values [series.col].value) == 0) { 
-								}
 							}
 
 							return ret;
